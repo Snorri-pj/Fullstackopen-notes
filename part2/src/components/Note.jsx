@@ -1,6 +1,6 @@
 const Note = ({ note, toggleImportance }) => {
     const label = note.important 
-        ? 'make note important' : 'make important'
+        ? 'make not important' : 'make important'
 
     return (
         <li>
