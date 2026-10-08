@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Note from './components/Note'
 import noteService from './services/notes'
+import Notification from './components/Notification'
+import Footer from './components/Footer'
 
 const App = (props) => {
   const [notes, setNotes] = useState([])
   const [newNote, setnewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   useEffect(() => {
     noteService
       .getAll()
       .then(response => {
-        setNotes(response.data)
+        setNotes(response)
       })
   }, [])
   console.log('render', notes.length, 'notes')
@@ -25,6 +27,15 @@ const App = (props) => {
       .update(id,changedNote)
       .then(response => {
         setNotes(notes.map(note => note.id == id ? response.data : note))
+      })
+      .catch(error => {
+        setErrorMessage(
+          `Note '${note.content}' was already removed from server`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setNotes(notes.filter(n => n.id !== id))
       })
   }
 
@@ -61,7 +72,7 @@ const App = (props) => {
 
     noteService
       .create(noteObject)
-      then(response => {
+      .then(response => {
         setNotes(notes.concat(response.data))
         setnewNote('')
       })
@@ -79,6 +90,7 @@ const App = (props) => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -100,6 +112,7 @@ const App = (props) => {
         />
         <button type="submit">save</button>
       </form>
+      <Footer />
     </div>
   )
 }
