@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Build outputs
+dist/
+build/
+# The backend serves the built frontend, so its dist must be committed for Render
+!part3/BACKEND/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
