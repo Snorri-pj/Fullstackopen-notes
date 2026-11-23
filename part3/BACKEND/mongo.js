@@ -9,7 +9,7 @@ const password = process.argv[2]
 
 const url = 
 `mongodb+srv://fullstack:${password}@cluster0.lfc948e.mongodb.net/noteApp?
-retryWrites=true&w?majority&appName=Cluster0`
+retryWrites=true&w?majority&appName=Cluster0ii`
 
 mongoose.set('strictQuery',false)
 
@@ -32,9 +32,8 @@ const Note = mongoose.model('Note', noteSchema)
 //     mongoose.connection.close()
 // })
 
-Note.find({}).then(result => {
-    result.forEach(note => {
-        console.log(note)
+app.get('/api/notes', (request, response) => {
+    Note.find({}).then(notes => {
+        response.json(notes)
     })
-    mongoose.connection.close()
 })
